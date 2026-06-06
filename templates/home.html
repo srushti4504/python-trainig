@@ -1,6 +1,49 @@
-{%extends "base.html" -%}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1> College Smart Portal</h1>
-<p> This project manages student records,attendence,marks ,and notices.</p>
+
+<h2 class="text-center mb-4">Welcome to College Smart Portal </h2>
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Students</h5>
+                <span class="badge bg-success">250+</span>
+                <p class="mt-2">Student records available.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Departments</h5>
+                <span class="badge bg-primary">5</span>
+                <p class="mt-2">Engineering Departments.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Internships</h5>
+                <span class="badge bg-warning text-dark">85%</span>
+                <p class="mt-2">Internship opportunities for students.</p>
+            </div>
+        </div>
+    </div>
+<div class="col-md-4 mt-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5>Notices</h5>
+                <span class="badge bg-danger">10</span>
+                <p class="mt-2"><p>
+
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
