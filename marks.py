@@ -16,3 +16,4 @@ elif percentage >= 45 :
    print ("Result : pass")
 else:
    print("Result: fail")      
+   

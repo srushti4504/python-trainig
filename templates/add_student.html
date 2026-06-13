@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+<h2>Add New Student</h2>
+<p style="background: #d4edda; padding: 10px;"></p>
+
+<form method="POST">
+    <label>Student Name:</label><br>
+    <input type="text" name="name" required><br><br>
+    
+    <label>Roll Number:</label><br>
+    <input type="number" name="roll_no" required><br><br>
+    
+    <label>Department:</label><br>
+    <input type="text" name="branch" required><br><br>
+    
+    <label>Attendance:</label><br>
+    <input type="text" name="attendance" required><br><br>
+    
+    <label>Marks:</label><br>
+    <input type="number" name="marks" required><br><br>
+    
+    <button type="submit">Add Student</button>
+  
+</form>
+{% endblock %}
