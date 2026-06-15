@@ -20,9 +20,9 @@ def init_db():
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
                     roll_no INTEGER NOT NULL,
-                    marks INTEGER NOT NULL,
+                 Attendance INTEGER DEFAULT 0
                     branch TEXT NOT NULL,
-                    attendance INTEGER DEFAULT 0
+                    Marks TEXT NOT NULL
                  )
                     ''')
     conn.commit()

@@ -24,9 +24,32 @@
     <hr>
 
     <div class="container mt-4">
-        {% block content %}
-        {% endblock %}
+    
+        <div class="container mt-4">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }} alert-dismissible fade show m-3" role="alert">
+                    {{ message }}
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert">
+                    </button>
+
+                 </div>
+
+                 {% endfor %}
+                 {% endif %}
+                {% endwith %}
+
+              {% block content %}
+                 {% endblock %}
+
     </div>
+    
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center p-3 mt-5">
