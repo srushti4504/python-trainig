@@ -16,13 +16,34 @@
         </div>
     </nav>
 
-    <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Back to Home</a>
-    <a href="{{ url_for('records') }}" class="btn btn-secondary mt-3">View Records</a>
-    <a href="{{ url_for('notices') }}" class="btn btn-secondary mt-3">View Notices</a>
-    <a href="{{ url_for('add_student') }}" class="btn btn-secondary mt-3">View add_student</a>
+    <a href="{{ url_for('home') }}" class="btn btn-secondary  py-2 mt-3">Back to Home</a>
+    <a href="{{ url_for('records') }}" class="btn btn-secondary  py-2 mt-3">View Records</a>
+    <a href="{{ url_for('notices') }}" class="btn btn-secondary  py-2 mt-3">View Notices</a>
+    <a href="{{ url_for('add_student') }}" class="btn btn-secondary  py-2 mt-3">View add_student</a>
+     <a href="{{url_for('filter')}}" class="btn btn-secondary  py-2 mt-3">Filter</a>
 
+    
+    
+     <!-- Small Search Bar -->
+    <form action="{{ url_for('search') }}" method="GET" class="d-flex ms-3 mt-3">
+
+        <input
+            type="search"
+            name="q"
+            class="form-control form-control-sm border-success"
+            placeholder="Search..."
+            value="{{ request.args.get('q', '') }}"
+            style="width: 180px;">
+
+        <button 
+        type="submit"
+        class="btn btn-success btn-sm ms-2">
+            Search
+        </button>
+
+    </form>
     <hr>
-
+     
     <div class="container mt-4">
     
         <div class="container mt-4">

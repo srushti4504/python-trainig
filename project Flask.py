@@ -36,6 +36,63 @@ def home():
 def notices():
     return render_template("notices.html", notices=notices)
 
+@app.route("/search")
+def search():
+    q = request.args.get("q", "")
+
+    conn = sqlite3.connect("college.db")
+    cursor = conn.cursor()
+
+    students = cursor.execute("""
+        SELECT id, name, roll_no, branch, attendance, marks
+        FROM students
+        WHERE name LIKE ?
+        OR CAST(roll_no AS TEXT) LIKE ?
+        OR branch LIKE ?
+    """, (f"%{q}%", f"%{q}%", f"%{q}%")).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "search.html",
+        students=students
+    )
+
+@app.route("/filter")
+def filter():
+
+    selected_branch = request.args.get("branch", "")
+
+    conn = sqlite3.connect("college.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT DISTINCT branch
+        FROM students
+        ORDER BY branch
+    """)
+
+    branches = [row["branch"] for row in cursor.fetchall()]
+
+    if selected_branch:
+        cursor.execute(
+            "SELECT * FROM students WHERE branch = ?",
+            (selected_branch,)
+        )
+    else:
+        cursor.execute("SELECT * FROM students")
+
+    students = cursor.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "filter.html",
+        students=students,
+        branches=branches,
+        selected_branch=selected_branch
+    )
 
 
 @app.route("/students")
