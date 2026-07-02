@@ -1,9 +1,11 @@
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, redirect, render_template, request, url_for, flash,session
 from database import get_db ,init_db
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
-app.secret_key = "College Smart Portal"
+app.secret_key = "college 123"
 
 students = [
     {"id": 1, "name": "Aarav", "branch": "Computer", "attendance": "92%", "marks": 85},
@@ -221,6 +223,74 @@ def delete_student(id):
     flash("Student deleted successfully", "success")
     return redirect(url_for('records'))
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password']
+        
+        conn = get_db()
+        # Check if username already exists
+        existing = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        if existing:
+            flash('Username already exists!', 'danger')
+            conn.close()
+            return render_template('register.html')
+        
+        hashed = generate_password_hash(password)
+        conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', (username, hashed, 'student'))
+        conn.commit()
+        conn.close()
+        flash('Registration successful! Please login.', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template("register.html")
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = get_db()
+        user = conn.execute('SELECT * FROM users WHERE username =?', (username,)).fetchone()
+        conn.close()
+
+        if user:
+            if check_password_hash(user[2], password):
+                session['user_id'] = user[0]
+                flash('Login Successful!', 'success')
+                return redirect(url_for('home'))
+            else:
+                flash('Invalid Password', 'danger')
+        else:
+            flash('User not found', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    
+    session.pop('username', None)
+    session.pop('role', None)
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
+
+@app.route('/branches')
+def subjects():
+    conn= get_db()
+    rows = conn.execute('''
+            SELECT branch.name AS branch_name, COUNT(students.id) AS student_count
+            FROM branch
+            LEFT JOIN students ON students.subject = branch.name
+            GROUP BY branch.name
+            ORDER BY branch.name
+    ''').fetchall()
+    conn.close()
+    return render_template('branches.html', rows=rows)
+       
 if __name__ == "__main__":
     init_db
     app.run(debug=True)

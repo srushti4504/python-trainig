@@ -23,6 +23,17 @@
      <a href="{{url_for('filter')}}" class="btn btn-secondary  py-2 mt-3">Filter</a>
 
     
+    {% if session.username %}
+                    <span class="nav-link px-2 py-1 text-white">👤 {{ session.username }}</span>
+                    <a class="nav-link px-2 py-1" href="{{ url_for('logout') }}">
+                        🔓 Logout
+                    </a>
+                {% else %}
+                    <a class="nav-link px-2 py-1" href="{{ url_for('login') }}">
+                        🔑 Login
+                    </a>
+                
+         {% endif %}
     
      <!-- Small Search Bar -->
     <form action="{{ url_for('search') }}" method="GET" class="d-flex ms-3 mt-3">
