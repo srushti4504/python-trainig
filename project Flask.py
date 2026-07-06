@@ -15,7 +15,7 @@ students = [
     {"id": 5, "name": "Rohan", "branch": "Computer", "attendance": "97%", "marks": 91}
 ]
 
-notices = [
+notice_items = [
     "Python Internship started on 28 May.",
     "Sir announced that,",
     "To encourage learning, consistency, and active participation,",
@@ -32,11 +32,11 @@ def home():
 
     students = conn.execute("SELECT * FROM students" ).fetchall()
 
-    return render_template(  "home.html", students=students  )
+    return render_template("home.html", students=students, notices=notice_items)
 
 @app.route("/notices")
 def notices():
-    return render_template("notices.html", notices=notices)
+    return render_template("notices.html", notices=notice_items)
 
 @app.route("/search")
 def search():
@@ -100,7 +100,7 @@ def filter():
 @app.route("/students")
 def students_page():
     conn = get_db()
-    students =conn.execute('SELECT * FORM students ORDER BY ID DESC').fetchall()
+    students =conn.execute('SELECT * FROM students ORDER BY ID DESC').fetchall()
     return  render_template("students.html",students=students)
 
 
@@ -122,6 +122,10 @@ def student_detail(id):
 
 @app.route("/add_student", methods=["GET", "POST"])
 def add_student():
+    if session.get('role') != 'admin':
+        flash("Admins only! You do not have permission to add a student.", "danger")
+        return redirect(url_for("home"))
+
     if request.method == "POST":
         name = request.form["name"]
         roll_no = int(request.form["roll_no"])
@@ -130,7 +134,6 @@ def add_student():
         marks = int(request.form["marks"])
 
         conn = get_db()
-
         conn.execute(
             """
             INSERT INTO students
@@ -139,21 +142,22 @@ def add_student():
             """,
             (name, roll_no, branch, attendance, marks)
         )
-
         conn.commit()
         conn.close()
 
-        
-
         flash(f"Student {name} added successfully!", "success")
         return redirect(url_for("records"))
-        
+
     return render_template("add_student.html")
 
 
 # EDIT - update by ID
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
+
+    if 'user_id' not in session:
+        flash("Admins only! You do not have permission to edit a student.", "warning")
+        return redirect(url_for("login"))
 
     conn = sqlite3.connect('college.db')
     cursor = conn.cursor()
@@ -196,12 +200,15 @@ def records():
         FROM students
     """).fetchall()
     conn.close()
-
+     
+      
     return render_template('records.html', students=students)
 
 @app.route('/delete/<int:id>')
 def delete_student(id):
-
+    if 'user_id' not in session:
+        flash("Admins only! You do not have permission to delete a student.", "warning")
+        return redirect(url_for("login"))
     conn = get_db()
 
     # Check student exists
@@ -261,6 +268,7 @@ def login():
         if user:
             if check_password_hash(user[2], password):
                 session['user_id'] = user[0]
+                session['role'] = user[3]
                 flash('Login Successful!', 'success')
                 return redirect(url_for('home'))
             else:
@@ -272,25 +280,24 @@ def login():
 
 @app.route('/logout')
 def logout():
-    
-    session.pop('username', None)
+    session.pop('user_id', None)
     session.pop('role', None)
+    session.pop('username', None)
     flash('You have been logged out.', 'info')
     return redirect(url_for('home'))
 
 @app.route('/branches')
 def subjects():
-    conn= get_db()
+    conn = get_db()
     rows = conn.execute('''
-            SELECT branch.name AS branch_name, COUNT(students.id) AS student_count
-            FROM branch
-            LEFT JOIN students ON students.subject = branch.name
-            GROUP BY branch.name
-            ORDER BY branch.name
+        SELECT branch AS branch_name, COUNT(id) AS student_count
+        FROM students
+        GROUP BY branch
+        ORDER BY branch
     ''').fetchall()
     conn.close()
     return render_template('branches.html', rows=rows)
        
 if __name__ == "__main__":
-    init_db
+    init_db()
     app.run(debug=True)

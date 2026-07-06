@@ -111,11 +111,18 @@ tr:hover{
             </td>
 
             <td>
+
+                   
+
                 <a href="{{ url_for('edit_student', id=student[0]) }}"
-                   class="action-btn edit-btn">Edit</a>
+                    class="action-btn edit-btn">
+                    Edit
+                </a>
 
                 <a href="{{ url_for('student_detail', id=student[0]) }}"
-                   class="action-btn detail-btn">Detail</a>
+                   class="action-btn detail-btn">
+                   Details
+                </a>
 
                 <a href="{{ url_for('delete_student', id=student[0]) }}"
                    class="action-btn delete-btn"
