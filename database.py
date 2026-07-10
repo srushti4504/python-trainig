@@ -1,8 +1,17 @@
+import os
 import sqlite3
+from flask import Flask, render_template, request, flash
+
+app = Flask(__name__)
+app.secret_key ="college 123"
 
 from flask import app
 
 DB_PATH = "college.db"
+
+#Absoulute path - Always with app.py folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "college.db")
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -43,4 +52,4 @@ def init_db():
 
 init_db()
 if __name__ == "__main__":
- app.run(debug=True)
+    app.run(debug=True)

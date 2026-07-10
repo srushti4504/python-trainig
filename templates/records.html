@@ -123,12 +123,16 @@ tr:hover{
                    class="action-btn detail-btn">
                    Details
                 </a>
+                
+            {% if session.get('role') == 'admin' %}
 
                 <a href="{{ url_for('delete_student', id=student[0]) }}"
                    class="action-btn delete-btn"
                    onclick="return confirm('Are you sure?')">
                    Delete
                 </a>
+
+            {% endif %}
             </td>
 
         </tr>
