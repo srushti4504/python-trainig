@@ -1,81 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Smart Portal</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .top-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            padding: 0 1rem;
-            margin-top: 1rem;
-        }
-
-        .top-actions .btn,
-        .top-actions form {
-            margin-top: 0;
-        }
-
-        .top-actions form {
-            flex: 1 1 280px;
-            max-width: 360px;
-        }
-
-        .top-actions .search-input {
-            width: 100%;
-            max-width: 220px;
-        }
-
-        @media (max-width: 576px) {
-            .top-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .top-actions .btn,
-            .top-actions form,
-            .top-actions .search-input {
-                width: 100%;
-                max-width: none;
-            }
-
-            .top-actions form {
-                flex-basis: 100%;
-            }
-        }
-    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <div class="container">
             <a class="navbar-brand" href="/">College Smart Portal</a>
         </div>
-    </nav>
-
-    <div class="top-actions">
-        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary py-2">🏠 Home</a>
-        <a href="{{ url_for('records') }}" class="btn btn-outline-secondary py-2">📋 View Records</a>
-        <a href="{{ url_for('notices') }}" class="btn btn-outline-secondary py-2">📰 View Notices</a>
-        <a href="{{ url_for('add_student') }}" class="btn btn-outline-secondary py-2">➕ Add Student</a>
-        <a href="{{ url_for('filter') }}" class="btn btn-outline-secondary py-2">🔍 Filter</a>
-
-        {% if session.username %}
-            <span class="btn btn-info py-2 disabled">👤 {{ session.username }}</span>
-            <a href="{{ url_for('logout') }}" class="btn btn-danger py-2">🔓 Logout</a>
-        {% else %}
-            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary py-2">🔑 Login</a>
-        {% endif %}
-
-        <form action="{{ url_for('search') }}" method="GET" class="d-flex flex-wrap gap-2">
-            <input type="search" name="q" class="form-control form-control-sm border-success search-input" placeholder="Search..." value="{{ request.args.get('q', '') }}">
-            <button type="submit" class="btn btn-success btn-sm">Search</button>
-        </form>
+    </nav> 
+    <-!-- Hamburger menu for mobile -->
+    <button class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNavbar"
+        aria-controls="mainNavbar"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('records') }}">Records</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('notices') }}">Notices</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('add_student') }}">Add Student</a>
+            </li>
+        </ul>
     </div>
+</nav>
+   <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('filter') }}">Filter</a>
+    </li>
+    {% if session.username %}
+        <li class="nav-item">
+            <span class="nav-link disabled">Logged in as {{ session.username }}</span>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        </li>
+    {% endif %}
+    
+
+
+    <a href="{{ url_for('home') }}" class="btn outline btn-outline-secondary py-2 mt-3">🏠 Home</a>
+    <a href="{{ url_for('records') }}" class="btn  outline btn-outline-secondary py-2 mt-3">📋 View Records</a>
+    <a href="{{ url_for('notices') }}" class="btn btn-outline-secondary py-2 mt-3">📰 View Notices</a>
+    <a href="{{ url_for('add_student') }}" class="btn btn-outline-secondary py-2 mt-3">➕ Add Student</a>
+    <a href="{{ url_for('filter') }}" class="btn btn-outline-secondary py-2 mt-3">🔍 Filter</a>
+
+    {% if session.username %}
+        <span class="btn btn-info py-2 mt-3 disabled">👤 {{ session.username }}</span>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger py-2 mt-3">🔓 Logout</a>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="btn outline btn-outline-secondary py-2 mt-3">🔑 Login</a>
+    {% endif %}
+
+    <form action="{{ url_for('search') }}" method="GET" class="d-flex ms-3 mt-3">
+        <input type="search" name="q" class="form-control form-control-sm border-success" placeholder="Search..." value="{{ request.args.get('q', '') }}" style="width: 180px;">
+        <button type="submit" class="btn btn-success btn-sm ms-2">Search</button>
+    </form>
     <hr>
 
     <div class="container mt-4">
