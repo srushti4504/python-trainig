@@ -22,6 +22,6 @@ A web application built with Python and Flask.
 ## 🚀 How to Run Locally
 ```bash
 git clone https://github.com/srushti4504/python-trainig.git 
-cd TUMHARA_REPO
-pip install -r requirements.txt
+cd python-trainig
+pip install -r requirement.txt
 python project Flask.py
