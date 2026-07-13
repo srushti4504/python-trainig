@@ -9,7 +9,12 @@ import os
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 
-load_dotenv() 
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, '.env'))  # Load environment variables from .env file
+
+
 
 app = Flask(__name__)
 app.secret_key = "college 123"
@@ -144,12 +149,6 @@ def get_ai_tip(id):
     )
     tip = response.choices[0].message.content
     return render_template("detail.html", student=student, tip=tip)
-
-
-
-
-
-
 
 
 
