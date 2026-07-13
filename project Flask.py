@@ -1,7 +1,16 @@
+from http import client
+
+
+from click import prompt
+from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash,session
 from database import get_db ,init_db
+from groq import Groq
+import os
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+
+load_dotenv() 
 
 
 app = Flask(__name__)
@@ -102,6 +111,43 @@ def students_page():
     conn = get_db()
     students =conn.execute('SELECT * FROM students ORDER BY ID DESC').fetchall()
     return  render_template("students.html",students=students)
+
+
+
+@app.route("/students/<int:id>/tip")
+def get_ai_tip(id):
+
+        conn = get_db()
+        student = conn.execute('SELECT * FROM students WHERE id = ?', (id,)).fetchone()
+        conn.close()
+        if student is None:
+            flash("Student not found", "danger")
+            return redirect(url_for("students_page"))
+        prompt = f"""
+        Student name: {student['name']}
+        Subject: {student['branch']}
+        Marks: {student['marks']}/100
+        Attendance: {student['attendance']}%
+        Please provide practical study tips, questions, and resources for the student to improve their performance. It should not be more than 2 lines.
+        """
+        client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+        tip = response.choices[0].message.content
+        return render_template("detail.html", student=student, tip=tip)
+
+
+
+
+
+
+
+
+
 
 
 
