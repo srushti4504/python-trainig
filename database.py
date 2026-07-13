@@ -2,14 +2,7 @@ import os
 import sqlite3
 from flask import Flask, render_template, request, flash
 
-app = Flask(__name__)
-app.secret_key ="college 123"
-
-from flask import app
-
-DB_PATH = "college.db"
-
-#Absoulute path - Always with app.py folder
+# Absolute path to the database in this package's folder
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "college.db")
 
@@ -41,6 +34,7 @@ def init_db():
             role TEXT DEFAULT 'student'
         )
     ''')
+    
 
     try:
         conn.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'student'")
@@ -50,6 +44,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    init_db()
