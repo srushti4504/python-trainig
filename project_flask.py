@@ -1,6 +1,7 @@
 from http import client
 
 from click import prompt
+from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash,session
 from database import get_db ,init_db
 from groq import Groq
@@ -8,8 +9,7 @@ import os
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
-
+load_dotenv()  # Load environment variables from .env file
 
 
 app = Flask(__name__)
