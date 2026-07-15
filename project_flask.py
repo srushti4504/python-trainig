@@ -1,7 +1,6 @@
 from http import client
 
 from click import prompt
-from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash,session
 from database import get_db ,init_db
 from groq import Groq
@@ -10,9 +9,6 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-load_dotenv(os.path.join(BASE_DIR, '.env'))  # Load environment variables from .env file
 
 
 
