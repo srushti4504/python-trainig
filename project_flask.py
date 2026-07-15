@@ -1,7 +1,19 @@
+from http import client
+
+from click import prompt
+from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash,session
 from database import get_db ,init_db
+from groq import Groq
+import os
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, '.env'))  # Load environment variables from .env file
+
 
 
 app = Flask(__name__)
@@ -23,6 +35,7 @@ notice_items = [
     "At the end of the training,",
     "The Top 5 performing students will be selected and rewarded with a special gift."
 ]
+
 
 
 @app.route("/")
@@ -97,11 +110,46 @@ def filter():
     )
 
 
+
 @app.route("/students")
 def students_page():
     conn = get_db()
     students =conn.execute('SELECT * FROM students ORDER BY ID DESC').fetchall()
     return  render_template("students.html",students=students)
+
+
+@app.route("/students/<int:id>/tip")
+def get_ai_tip(id):
+    conn = get_db()
+    student = conn.execute('SELECT * FROM students WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    if student is None:
+        flash("Student not found", "danger")
+    
+
+    prompt = f"""
+    Student name: {student['name']}
+    Branch: {student['branch']}
+    Marks: {student['marks']}/100
+    Attendance: {student['attendance']}%
+    
+    Give a study tip for this student based on their marks and branch.
+    if the marks are below 40, suggest ways to improve their performance.
+    if the marks are above 60, suggest to focus on the weak subjects and score better.
+    if the marks are above 80, suggest to improve their performance take mock tests and work on weaker areas to increase their marks.
+    if the marks are above 95, suggest  Excellent performance keep up your consistency and dedication.
+    and encourage them to continue learning and practicing.
+    """
+    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[
+            {"role": "user", "content": prompt}
+        ]
+    )
+    tip = response.choices[0].message.content
+    return render_template("detail.html", student=student, tip=tip)
+
 
 
 
@@ -297,7 +345,7 @@ def subjects():
     ''').fetchall()
     conn.close()
     return render_template('branches.html', rows=rows)
-       
+
+init_db()    
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
