@@ -2,6 +2,10 @@
     Student Records
 </h1>
 
+<div style="text-align:center; margin-bottom: 10px;">
+    <a href="{{ url_for('home') }}" class="action-btn back-btn">Back to Home</a>
+</div>
+
 <style>
 .table-wrapper {
     width: 95%;
@@ -60,6 +64,19 @@ tr:hover{
     background:red;
 }
 
+.back-btn{
+    background:#3498db;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.back-btn:hover{
+    background:#217dbb;
+}
+
 .search-box{
     width: min(100%, 420px);
     padding:10px;
@@ -111,13 +128,20 @@ tr:hover{
         <tbody id="tableBody">
         {% for student in students %}
             <tr data-name="{{ student[1]|lower }}">
-
-                <td>{{ student[1] }}</td>
+                <td style="display: flex; align-items: center; gap: 10px;">
+                    {% set default_image = url_for('static', filename='defaults/student_default.svg') %}
+                    <img 
+                        src="{{ default_image }}"
+                        alt="{{ student[1] }}"
+                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #f0f0f0;">
+                    <span>{{ student[1] }}</span>
+                </td>
                 <td>{{ student[2] }}</td>
                 <td>{{ student[3] }}</td>
                 <td>{{ student[4] }}</td>
                 <td>{{ student[5] }}</td>
 
+                    
                 <td>
                     {% if student[5] >= 80 %}
                         <span style="background:green;color:white;padding:5px 10px;border-radius:10px;">

@@ -50,11 +50,17 @@
             </thead>
 
             <tbody>
+                {% set default_image = url_for('static', filename='defaults/student_default.svg') %}
 
                 {% for student in students %}
                 <tr>
 
-                    <td>{{ student["name"] }}</td>
+                    <td style="display:flex; align-items:center; gap:10px;">
+                        <img src="{{ default_image }}"
+                            alt="{{ student['name'] }}"
+                            style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#f0f0f0;">
+                        <span>{{ student["name"] }}</span>
+                    </td>
                     <td>{{ student["roll_no"] }}</td>
                     <td>{{ student["branch"] }}</td>
                     <td>{{ student["attendance"] }}</td>

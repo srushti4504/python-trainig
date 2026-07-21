@@ -3,17 +3,36 @@ from http import client
 from click import prompt
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, flash,session
-from database import get_db ,init_db
+from database import BASE_DIR, get_db ,init_db
 from groq import Groq
 import os
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from werkzeug.utils import secure_filename
 
 load_dotenv()  # Load environment variables from .env file
 
 
-app = Flask(__name__)
+# Configure Flask with explicit static folder path
+STATIC_FOLDER = os.path.join(BASE_DIR, 'static')
+app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='/static')
 app.secret_key = "college 123"
+
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Create the upload folder if it doesn't exist
+
+def allowed_file(filename):
+    #only allow certain file extensions
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
 
 students = [
     {"id": 1, "name": "Aarav", "branch": "Computer", "attendance": "92%", "marks": 85},
@@ -177,14 +196,25 @@ def add_student():
         attendance = request.form["attendance"]
         marks = int(request.form["marks"])
 
+
+    
+       #Add: handle photo upload
+        file = request.files.get('photo')
+        filename = 'default.png'  # Default photo
+        if file and file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    
+
+
         conn = get_db()
         conn.execute(
             """
             INSERT INTO students
-            (name, roll_no, branch, attendance, marks)
-            VALUES (?, ?, ?, ?, ?)
+            (name, roll_no, branch, attendance, marks, photo)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (name, roll_no, branch, attendance, marks)
+            (name, roll_no, branch, attendance, marks, filename)
         )
         conn.commit()
         conn.close()
@@ -217,11 +247,18 @@ def edit_student(id):
         attendance = request.form['attendance']
         marks = request.form['marks']
 
+        # Handle photo upload
+        file = request.files.get('photo')
+        filename = student[6]  # Keep the existing photo if no new one is uploaded
+        if file and file.filename and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
         cursor.execute("""
             UPDATE students
-            SET name=?, roll_no=?, branch=?, attendance=?, marks=?
+            SET name=?, roll_no=?, branch=?, attendance=?, marks=?, photo=?
             WHERE id=?
-        """, (name, roll_no, branch, attendance, marks, id))
+        """, (name, roll_no, branch, attendance, marks, filename))
 
         conn.commit()
         conn.close()
@@ -237,10 +274,10 @@ def edit_student(id):
 
 
 @app.route('/records')
-def records():
+def records():    
     conn = get_db()
     students = conn.execute("""
-        SELECT id, name, roll_no, branch, attendance, marks
+        SELECT id, name, roll_no, branch, attendance, marks, photo
         FROM students
     """).fetchall()
     conn.close()

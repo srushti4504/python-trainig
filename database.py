@@ -41,6 +41,14 @@ def init_db():
     except sqlite3.OperationalError:
         pass
 
+
+    try:
+       conn.execute("ALTER TABLE students ADD COLUMN photo TEXT DEFAULT 'default.png'")
+    except Exception:
+        # Column already exists
+        pass
+
+
     conn.commit()
     conn.close()
 
