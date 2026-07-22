@@ -5,7 +5,7 @@
 <h2>Add New Student</h2>
 <p style="background: #d4edda; padding: 10px;"></p>
 
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     <label>Student Name:</label><br>
     <input type="text" name="name" required><br><br>
     
@@ -14,9 +14,16 @@
     
     <label>Department:</label><br>
     <input type="text" name="branch" required><br><br>
-    
+
+    <label>Year:</label><br>
+    <select name="year" required>
+        <option value="1st Year">1st Year</option>
+        <option value="2nd Year">2nd Year</option>
+        <option value="3rd Year">3rd Year</option>
+    </select><br><br>
+
     <label>Attendance:</label><br>
-    <input type="text" name="attendance" required><br><br>
+    <input type="number" name="attendance" min="0" max="100" required><br><br>
     
     <label>Marks:</label><br>
     <input type="number" name="marks" required><br><br>

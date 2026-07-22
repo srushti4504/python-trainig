@@ -9,18 +9,28 @@
     <!-- Filter Form -->
     <form method="GET" action="{{ url_for('filter') }}" class="row mb-4">
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <select name="branch" class="form-select">
 
                 <option value="">All Branches</option>
 
                 {% for branch in branches %}
-                <option value="{{ branch }}"
-                    {% if selected_branch == branch %}selected{% endif %}>
+                <option value="{{ branch }}" {% if selected_branch == branch %}selected{% endif %}>
                     {{ branch }}
                 </option>
                 {% endfor %}
 
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="year" class="form-select">
+                <option value="">All Years</option>
+                {% for year in years %}
+                <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>
+                    {{ year }}
+                </option>
+                {% endfor %}
             </select>
         </div>
 
@@ -42,6 +52,7 @@
                     <th>Name</th>
                     <th>Roll_No</th>
                     <th>Branch</th>
+                    <th>Year</th>
                     <th>Attendance</th>
                     <th>Marks</th>
                     <th>Performance</th>
@@ -63,6 +74,7 @@
                     </td>
                     <td>{{ student["roll_no"] }}</td>
                     <td>{{ student["branch"] }}</td>
+                    <td>{{ student["year"] }}</td>
                     <td>{{ student["attendance"] }}</td>
                     <td>{{ student["marks"] }}</td>
 

@@ -69,32 +69,25 @@ def notices():
 @app.route("/search")
 def search():
     q = request.args.get("q", "")
-
-    conn = sqlite3.connect("college.db")
-    cursor = conn.cursor()
-
-    students = cursor.execute("""
-        SELECT id, name, roll_no, branch, attendance, marks
+    conn = get_db()
+    students = conn.execute("""
+        SELECT id, name, roll_no, branch, attendance, marks, year
         FROM students
         WHERE name LIKE ?
         OR CAST(roll_no AS TEXT) LIKE ?
         OR branch LIKE ?
-    """, (f"%{q}%", f"%{q}%", f"%{q}%")).fetchall()
+        OR year LIKE ?
+    """, (f"%{q}%", f"%{q}%", f"%{q}%", f"%{q}%")).fetchall()
 
-    conn.close()
-
-    return render_template(
-        "search.html",
-        students=students
-    )
+    return render_template("search.html", students=students)
 
 @app.route("/filter")
 def filter():
 
     selected_branch = request.args.get("branch", "")
+    selected_year = request.args.get("year", "")
 
-    conn = sqlite3.connect("college.db")
-    conn.row_factory = sqlite3.Row
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -102,26 +95,42 @@ def filter():
         FROM students
         ORDER BY branch
     """)
-
     branches = [row["branch"] for row in cursor.fetchall()]
 
-    if selected_branch:
+    cursor.execute("""
+        SELECT DISTINCT year
+        FROM students
+        ORDER BY year
+    """)
+    years = [row["year"] for row in cursor.fetchall()]
+
+    if selected_branch and selected_year:
+        cursor.execute(
+            "SELECT * FROM students WHERE branch = ? AND year = ?",
+            (selected_branch, selected_year)
+        )
+    elif selected_branch:
         cursor.execute(
             "SELECT * FROM students WHERE branch = ?",
             (selected_branch,)
+        )
+    elif selected_year:
+        cursor.execute(
+            "SELECT * FROM students WHERE year = ?",
+            (selected_year,)
         )
     else:
         cursor.execute("SELECT * FROM students")
 
     students = cursor.fetchall()
 
-    conn.close()
-
     return render_template(
         "filter.html",
         students=students,
         branches=branches,
-        selected_branch=selected_branch
+        years=years,
+        selected_branch=selected_branch,
+        selected_year=selected_year
     )
 
 
@@ -193,28 +202,24 @@ def add_student():
         name = request.form["name"]
         roll_no = int(request.form["roll_no"])
         branch = request.form["branch"]
-        attendance = request.form["attendance"]
+        year = request.form.get("year", "1st Year")
+        attendance = int(request.form["attendance"])
         marks = int(request.form["marks"])
 
-
-    
-       #Add: handle photo upload
         file = request.files.get('photo')
         filename = 'default.png'  # Default photo
         if file and file.filename and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    
-
 
         conn = get_db()
         conn.execute(
             """
             INSERT INTO students
-            (name, roll_no, branch, attendance, marks, photo)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (name, roll_no, attendance, branch, marks, year, photo)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (name, roll_no, branch, attendance, marks, filename)
+            (name, roll_no, attendance, branch, marks, year, filename)
         )
         conn.commit()
         conn.close()
@@ -233,38 +238,33 @@ def edit_student(id):
         flash("Admins only! You do not have permission to edit a student.", "warning")
         return redirect(url_for("login"))
 
-    conn = sqlite3.connect('college.db')
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT * FROM students WHERE id = ?", (id,))
-    student = cursor.fetchone()
+    conn = get_db()
+    student = conn.execute("SELECT * FROM students WHERE id = ?", (id,)).fetchone()
 
     if request.method == 'POST':
-
         name = request.form['name']
-        roll_no = request.form['roll_no']
+        roll_no = int(request.form['roll_no'])
         branch = request.form['branch']
-        attendance = request.form['attendance']
-        marks = request.form['marks']
+        year = request.form.get('year', student['year'] if student else '1st Year')
+        attendance = int(request.form['attendance'])
+        marks = int(request.form['marks'])
 
-        # Handle photo upload
         file = request.files.get('photo')
-        filename = student[6]  # Keep the existing photo if no new one is uploaded
+        filename = student['photo'] if student and 'photo' in student.keys() else 'default.png'
         if file and file.filename and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        cursor.execute("""
+        conn.execute("""
             UPDATE students
-            SET name=?, roll_no=?, branch=?, attendance=?, marks=?, photo=?
+            SET name=?, roll_no=?, branch=?, attendance=?, marks=?, year=?, photo=?
             WHERE id=?
-        """, (name, roll_no, branch, attendance, marks, filename))
+        """, (name, roll_no, branch, attendance, marks, year, filename, id))
 
         conn.commit()
         conn.close()
 
         flash(f"{name}'s record updated successfully!", "success")
-
         return redirect(url_for('records'))
 
     conn.close()
@@ -277,7 +277,7 @@ def edit_student(id):
 def records():    
     conn = get_db()
     students = conn.execute("""
-        SELECT id, name, roll_no, branch, attendance, marks, photo
+        SELECT id, name, roll_no, branch, attendance, marks, year, photo
         FROM students
     """).fetchall()
     conn.close()
@@ -378,6 +378,50 @@ def subjects():
     ''').fetchall()
     conn.close()
     return render_template('branches.html', rows=rows)
+
+
+@app.route('/dashboard')
+def dashboard():
+    conn = get_db()
+    total_students = conn.execute("SELECT COUNT(*) AS total FROM students").fetchone()[0]
+    avg_marks_row = conn.execute("SELECT AVG(marks) AS avg_marks FROM students").fetchone()
+    average_marks = round(avg_marks_row[0],1) if avg_marks_row and avg_marks_row[0] is not None else 0
+    avg_att_row = conn.execute("SELECT AVG(attendance) AS avg_att FROM students").fetchone()
+    average_attendance = round(avg_att_row[0],1) if avg_att_row and avg_att_row[0] is not None else 0
+
+    year_counts = conn.execute("""
+        SELECT year, COUNT(*) AS count
+        FROM students
+        GROUP BY year
+        ORDER BY year
+    """).fetchall()
+
+    branch_counts = conn.execute("""
+        SELECT branch AS branch_name, COUNT(*) AS count, GROUP_CONCAT(name, ', ') AS names
+        FROM students
+        GROUP BY branch
+        ORDER BY branch
+    """).fetchall()
+
+    year_branch_counts = conn.execute("""
+        SELECT year, branch, COUNT(*) AS count
+        FROM students
+        GROUP BY year, branch
+        ORDER BY year, branch
+    """).fetchall()
+
+    students = conn.execute("SELECT name, branch, year FROM students ORDER BY year, branch, name").fetchall()
+
+    conn.close()
+
+    return render_template('dashboard.html',
+                           total_students=total_students,
+                           average_marks=average_marks,
+                           average_attendance=average_attendance,
+                           year_counts=year_counts,
+                           branch_counts=branch_counts,
+                           year_branch_counts=year_branch_counts,
+                           students=students)
 
 init_db()    
 if __name__ == "__main__":

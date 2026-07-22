@@ -22,7 +22,8 @@ def init_db():
             roll_no INTEGER NOT NULL,
             attendance INTEGER DEFAULT 0,
             branch TEXT NOT NULL,
-            marks INTEGER NOT NULL
+            marks INTEGER NOT NULL,
+            year TEXT DEFAULT '1st Year'
         )
     ''')
 
@@ -43,9 +44,13 @@ def init_db():
 
 
     try:
+       conn.execute("ALTER TABLE students ADD COLUMN year TEXT DEFAULT '1st Year'")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
        conn.execute("ALTER TABLE students ADD COLUMN photo TEXT DEFAULT 'default.png'")
-    except Exception:
-        # Column already exists
+    except sqlite3.OperationalError:
         pass
 
 
