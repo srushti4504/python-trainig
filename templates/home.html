@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 class="text-center mb-4">Welcome to College Smart Portal</h2>
-
 <div class="row">
-    <div class="col-12 col-md-4 mb-3">
-        <div class="card shadow">
-            <div class="card-body">
-                <h5>Students</h5>
-                <span class="badge bg-success">250+</span>
-                <p class="mt-2">Student records available.</p>
+    <div class="col-12">
+        <div class="card bg-success text-white shadow-lg mb-4">
+            <div class="card-body p-5">
+                <h1 class="display-6 fw-bold">Welcome to College Smart Portal</h1>
+                <p class="lead my-4">Manage students records,marks , attendance and results - all in one place.</p>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                    <a href="{{ url_for('records') }}" class="btn btn-light btn-lg text-success">View Students</a>
+                    <a href="{{ url_for('notices') }}" class="btn btn-outline-light btn-lg">Read Notices</a>
+                </div>
             </div>
         </div>
     </div>
@@ -24,8 +25,8 @@
         </div>
     </div>
 
-    <div class="col-12 col-md-4 mb-3">
-        <div class="card shadow">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card shadow-sm h-100">
             <div class="card-body">
                 <h5>Internships</h5>
                 <span class="badge bg-warning text-dark">85%</span>
@@ -34,12 +35,24 @@
         </div>
     </div>
 
-    <div class=" col-12 col-md-4 mt-4">
-        <div class="card shadow">
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card shadow-sm h-100">
             <div class="card-body">
-                <h5>Notices</h5>
-                <span class="badge bg-danger">10</span>
-                <p class="mt-2"></p>
+                <h5 class="card-title">Notice Board</h5>
+                <p class="card-text">View notices, announcements, and important updates.</p>
+                <span class="badge bg-warning text-dark">10 active</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Records</h5>
+                <p class="card-text">View student records, attendance, and results.</p>
+                <span class="badge bg-success">3 upcoming</span>
             </div>
         </div>
     </div>
