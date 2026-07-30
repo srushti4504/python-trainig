@@ -127,16 +127,24 @@ tr:hover{
         </thead>
 
         <tbody id="tableBody">
-        {% for student in students %}
+           {% for student in students %}
             <tr data-name="{{ student[1]|lower }}">
-                <td style="display: flex; align-items: center; gap: 10px;">
-                    {% set default_image = url_for('static', filename='defaults/student_default.svg') %}
-                    <img 
-                        src="{{ default_image }}"
-                        alt="{{ student[1] }}"
-                        style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #f0f0f0;">
-                    <span>{{ student[1] }}</span>
-                </td>
+      <td style="display:flex;align-items:center;gap:10px;">
+
+                 {% if student[7] %}
+             <img src="{{ url_for('static', filename='uploads/' + student[7]) }}"
+                 alt="{{ student[1] }}"
+              style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+            {% else %}
+          <img src="{{ url_for('static', filename='uploads/default.png') }}"
+             alt="Default"
+             style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+           {% endif %}
+
+          <span>{{ student[1] }}</span>
+
+       </td>
+            
                 <td>{{ student[2] }}</td>
                 <td>{{ student[3] }}</td>
                 <td>{{ student[6] }}</td>

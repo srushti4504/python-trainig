@@ -9,16 +9,25 @@
             <h2>Student Details</h2>
         </div>
 
-            <div style="display:flex; align-items:center; gap:16px; padding:16px;">
-                {% set default_image = url_for('static', filename='defaults/student_default.svg') %}
-                {% set photo_present = 'photo' in student.keys() and student['photo'] %}
-                {% set image_url = default_image if (not photo_present) or (student['photo'] == 'default.png') else url_for('static', filename='uploads/' + student['photo']) %}
-                <img src="{{ image_url }}" alt="Student photo" style="width:96px; height:96px; border-radius:12px; object-fit:cover;">
+           <div style="display:flex; align-items:center; gap:16px; padding:16px;">
+
+              <img
+             src="{% if student.photo %}
+               {{ url_for('static', filename='uploads/' + student.photo) }}
+              {% else %}
+              {{ url_for('static', filename='images/default.png') }}
+             {% endif %}"
+              alt="{{ student.name }}"
+              class="img-fluid rounded-circle"
+             style="width:150px; height:150px; object-fit:cover;">
+
                 <div>
                     <h3 style="margin:0;">{{ student[1] }}</h3>
                     <div style="color:#666;">Roll: {{ student[2] }}</div>
                 </div>
-            </div>
+          </div>        
+              
+        
 
             <table class="table table-bordered">
 
