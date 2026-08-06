@@ -274,16 +274,23 @@ def edit_student(id):
 
 
 @app.route('/records')
-def records():    
+def records(): 
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+    offset = (page - 1) * per_page   
     conn = get_db()
     students = conn.execute("""
         SELECT id, name, roll_no, branch, attendance, marks, year, photo
         FROM students
-    """).fetchall()
+        ORDER BY id DESC
+        LIMIT ? OFFSET ?
+    """, (per_page, offset)).fetchall()
+    total = conn.execute('SELECT COUNT(*) FROM students').fetchone()[0]
     conn.close()
+    total_pages = (total + per_page - 1) // per_page  # Calculate total pages
      
       
-    return render_template('records.html', students=students)
+    return render_template('records.html', students=students, total_pages=total_pages)
 
 @app.route('/delete/<int:id>')
 def delete_student(id):
