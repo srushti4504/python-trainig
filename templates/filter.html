@@ -61,15 +61,19 @@
             </thead>
 
             <tbody>
-                {% set default_image = url_for('static', filename='defaults/student_default.svg') %}
-
                 {% for student in students %}
                 <tr>
 
                     <td style="display:flex; align-items:center; gap:10px;">
-                        <img src="{{ default_image }}"
-                            alt="{{ student['name'] }}"
-                            style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#f0f0f0;">
+                        {% if student['photo'] %}
+                            <img src="{{ url_for('static', filename='uploads/' + student['photo']) }}"
+                                 alt="{{ student['name'] }}"
+                                 style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#f0f0f0;">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='uploads/default.png') }}"
+                                 alt="Default"
+                                 style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#f0f0f0;">
+                        {% endif %}
                         <span>{{ student["name"] }}</span>
                     </td>
                     <td>{{ student["roll_no"] }}</td>

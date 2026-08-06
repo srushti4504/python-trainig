@@ -35,8 +35,8 @@
                 </form>
 
                 <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0">
-                    {% if session.username %}
-                        <span class="btn btn-info py-2 me-2 disabled">👤 {{ session.username }}</span>
+                    {% if session.get('username') %}
+                        <span class="btn btn-info py-2 me-2 disabled">👤 {{ session.get('username') }}</span>
                         <a href="{{ url_for('logout') }}" class="btn btn-danger py-2">🔓 Logout</a>
                     {% else %}
                         <a href="{{ url_for('login') }}" class="btn btn-outline-light py-2">🔑 Login</a>

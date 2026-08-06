@@ -290,7 +290,7 @@ def records():
     total_pages = (total + per_page - 1) // per_page  # Calculate total pages
      
       
-    return render_template('records.html', students=students, total_pages=total_pages)
+    return render_template('records.html', students=students, total_pages=total_pages, page=page)
 
 @app.route('/delete/<int:id>')
 def delete_student(id):
@@ -356,6 +356,7 @@ def login():
         if user:
             if check_password_hash(user[2], password):
                 session['user_id'] = user[0]
+                session['username'] = user[1]
                 session['role'] = user[3]
                 flash('Login Successful!', 'success')
                 return redirect(url_for('home'))

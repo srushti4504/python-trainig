@@ -100,6 +100,53 @@ tr:hover{
         font-size: 14px;
     }
 }
+
+.table-wrapper {
+    width: 95%;
+    margin: 20px auto;
+    overflow-x: auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #dbe2ea;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem auto 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: fit-content;
+}
+
+.pagination .page-item {
+    display: inline-block;
+}
+
+.pagination .page-link {
+    display: inline-block;
+    padding: 0.55rem 0.95rem;
+    border: 1px solid #dee2e6;
+    color: #0d6efd;
+    text-decoration: none;
+    border-radius: 0.45rem;
+    background: white;
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.pagination .page-link:hover {
+    background-color: #f2f5fa;
+}
 </style>
 
 
@@ -194,14 +241,15 @@ tr:hover{
         {% endfor %}
         </tbody>
     </table>
-      <div class="text-center mt-3">
+      <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3">
+          <ul class="pagination mb-0">
               {% for p in range(1, total_pages + 1) %}
-           <a href="{{ url_for('records', page=p) }}"
-               class="btn {% if p == page %}btn-primary{% else %}btn-outline-primary{% endif %}">
-               {{ p }}
-           </a>
-           {% endfor %}
-      </div>
+                  <li class="page-item {% if p == page %}active{% endif %}">
+                      <a class="page-link" href="{{ url_for('records', page=p) }}">{{ p }}</a>
+                  </li>
+              {% endfor %}
+          </ul>
+      </nav>
 </div>
 
 <script>
