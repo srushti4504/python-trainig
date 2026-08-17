@@ -419,7 +419,6 @@ def dashboard():
     """).fetchall()
 
     students = conn.execute("SELECT name, branch, year, marks, attendance FROM students ORDER BY year, branch, name").fetchall()
-
     conn.close()
 
     return render_template('dashboard.html',
@@ -430,7 +429,7 @@ def dashboard():
                            branch_counts=branch_counts,
                            year_branch_counts=year_branch_counts,
                            students=students)
-
+                           
 @app.route('/reports')
 def reports():
     conn = get_db()

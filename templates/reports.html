@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Performance Reports</h2>
+
+    <!-- Department-wise Performance -->
+    <div class="card shadow-sm p-3 border-0 mb-4">
+        <h4 class="mb-3">📊 Department-wise Performance</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Department</th>
+                        <th>Total Students</th>
+                        <th>Average Marks</th>
+                        <th>Highest Marks</th>
+                        <th>Lowest Marks</th>
+                        <th>Average Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept in dept_performance %}
+                    <tr>
+                        <td><strong>{{ dept['department'] }}</strong></td>
+                        <td><span class="badge bg-primary">{{ dept['total_students'] }}</span></td>
+                        <td>
+                            <span class="badge {% if dept['avg_marks'] >= 80 %}bg-success{% elif dept['avg_marks'] >= 70 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                                {{ dept['avg_marks'] }}
+                            </span>
+                        </td>
+                        <td><span class="text-success fw-bold">{{ dept['highest_marks'] }}</span></td>
+                        <td><span class="text-danger fw-bold">{{ dept['lowest_marks'] }}</span></td>
+                        <td>{{ dept['avg_attendance'] }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Year-wise Performance -->
+    <div class="card shadow-sm p-3 border-0 mb-4">
+        <h4 class="mb-3">📅 Year-wise Performance</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Year</th>
+                        <th>Total Students</th>
+                        <th>Average Marks</th>
+                        <th>Highest Marks</th>
+                        <th>Lowest Marks</th>
+                        <th>Average Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for year in year_performance %}
+                    <tr>
+                        <td><strong>{{ year['year'] }}</strong></td>
+                        <td><span class="badge bg-info">{{ year['total_students'] }}</span></td>
+                        <td>
+                            <span class="badge {% if year['avg_marks'] >= 80 %}bg-success{% elif year['avg_marks'] >= 70 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                                {{ year['avg_marks'] }}
+                            </span>
+                        </td>
+                        <td><span class="text-success fw-bold">{{ year['highest_marks'] }}</span></td>
+                        <td><span class="text-danger fw-bold">{{ year['lowest_marks'] }}</span></td>
+                        <td>{{ year['avg_attendance'] }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

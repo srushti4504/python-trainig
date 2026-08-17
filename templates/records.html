@@ -1,264 +1,153 @@
-<h1 style="text-align:center; margin:20px; color:#2c3e50;">
-    Student Records
-</h1>
+{% extends 'base.html' %}
 
-<div style="text-align:center; margin-bottom: 10px;">
-    <a href="{{ url_for('home') }}" class="action-btn back-btn">Back to Home</a>
+{% block content %}
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold mb-2">
+                <i class="fas fa-users me-2"></i>Student Records
+            </h1>
+            <p class="text-muted">Manage and view all student information</p>
+        </div>
+        <a href="{{ url_for('home') }}" class="btn btn-outline-success">
+            <i class="fas fa-arrow-left me-2"></i>Back to Home
+        </a>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="fas fa-search text-success"></i>
+                </span>
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="form-control border-start-0"
+                    placeholder="Search by student name...">
+            </div>
+            <small id="resultInfo" class="text-muted d-block mt-2">
+                <i class="fas fa-info-circle me-1"></i><span id="resultCount">Loading...</span>
+            </small>
+        </div>
+    </div>
+
+    <!-- Records Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th><i class="fas fa-user me-2"></i>Name</th>
+                        <th><i class="fas fa-id-card me-2"></i>Roll No</th>
+                        <th><i class="fas fa-graduation-cap me-2"></i>Branch</th>
+                        <th><i class="fas fa-calendar me-2"></i>Year</th>
+                        <th><i class="fas fa-clipboard-check me-2"></i>Attendance</th>
+                        <th><i class="fas fa-star me-2"></i>Marks</th>
+                        <th><i class="fas fa-chart-line me-2"></i>Performance</th>
+                        <th><i class="fas fa-cog me-2"></i>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for student in students %}
+                    <tr data-name="{{ student[1]|lower }}" class="align-middle">
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                {% if student[7] %}
+                                    <img src="{{ url_for('static', filename='uploads/' + student[7]) }}"
+                                        alt="{{ student[1] }}"
+                                        style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                                {% else %}
+                                    <div class="avatar-placeholder" style="width:40px;height:40px;border-radius:50%;background:#13a467;color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;">
+                                        {{ student[1][0] }}
+                                    </div>
+                                {% endif %}
+                                <span class="fw-600">{{ student[1] }}</span>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-light text-dark">{{ student[2] }}</span></td>
+                        <td>{{ student[3] }}</td>
+                        <td><span class="badge bg-info">{{ student[6] }}</span></td>
+                        <td>
+                            <span class="fw-600">{{ student[4] }}</span>
+                            {% set att_percent = (student[4]|string).rstrip('%')|int %}
+                            <div class="progress" style="height: 6px; margin-top: 4px;">
+                                <div class="progress-bar bg-success" role="progressbar" data-width="{{ att_percent }}" aria-valuenow="{{ att_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </td>
+                        <td><span class="fw-700">{{ student[5] }}/100</span></td>
+                        <td>
+                            {% if student[5] >= 80 %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-star me-1"></i>Excellent
+                                </span>
+                            {% elif student[5] >= 60 %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>Good
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-arrow-down me-1"></i>Average
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ url_for('student_detail', id=student[0]) }}"
+                                   class="btn btn-outline-info btn-sm" title="View Details">
+                                   <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('edit_student', id=student[0]) }}"
+                                    class="btn btn-outline-warning btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% if session.get('role') == 'admin' %}
+                                    <a href="{{ url_for('delete_student', id=student[0]) }}"
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Are you sure?')"
+                                       title="Delete">
+                                       <i class="fas fa-trash"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+            <ul class="pagination mb-0">
+                {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('records', page=p) }}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
 </div>
 
-<style>
-.table-wrapper {
-    width: 95%;
-    margin: 20px auto;
-    overflow-x: auto;
-}
-
-table{
-    width: 100%;
-    min-width: 900px;
-    margin: 0 auto;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-}
-
-th{
-    background:#2c3e50;
-    color:white;
-    padding:12px;
-    border:1px solid #ddd;
-}
-
-td{
-    padding:10px;
-    text-align:center;
-    border:1px solid #ddd;
-}
-
-tr:nth-child(even){
-    background:#f2f2f2;
-}
-
-tr:hover{
-    background:#e8f4ff;
-}
-
-.action-btn{
-    padding:6px 12px;
-    margin:2px;
-    text-decoration:none;
-    border-radius:5px;
-    color:white;
-    display:inline-block;
-}
-
-.edit-btn{
-    background:orange;
-}
-
-.detail-btn{
-    background:blue;
-}
-
-.delete-btn{
-    background:red;
-}
-
-.back-btn{
-    background:#3498db;
-    color:white;
-    padding:10px 18px;
-    border-radius:8px;
-    text-decoration:none;
-    font-weight:600;
-}
-
-.back-btn:hover{
-    background:#217dbb;
-}
-
-.search-box{
-    width: min(100%, 420px);
-    padding:10px;
-    margin:10px auto;
-    display:block;
-    font-size:16px;
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    table {
-        font-size: 14px;
-        min-width: 800px;
-    }
-
-    .search-box {
-        width: 90%;
-        font-size: 14px;
-    }
-}
-
-.table-wrapper {
-    width: 95%;
-    margin: 20px auto;
-    overflow-x: auto;
-    padding: 20px;
-    background: white;
-    border: 1px solid #dbe2ea;
-    border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
-}
-
-.pagination {
-    list-style: none;
-    padding: 0;
-    margin: 1.5rem auto 0;
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    max-width: fit-content;
-}
-
-.pagination .page-item {
-    display: inline-block;
-}
-
-.pagination .page-link {
-    display: inline-block;
-    padding: 0.55rem 0.95rem;
-    border: 1px solid #dee2e6;
-    color: #0d6efd;
-    text-decoration: none;
-    border-radius: 0.45rem;
-    background: white;
-    min-width: 40px;
-    text-align: center;
-}
-
-.pagination .page-item.active .page-link {
-    background-color: #0d6efd;
-    color: white;
-    border-color: #0d6efd;
-}
-
-.pagination .page-link:hover {
-    background-color: #f2f5fa;
-}
-</style>
-
-
-<input
-    type="text"
-    id="searchInput"
-    class="search-box"
-    placeholder="Search student by name...">
-
-<div id="resultInfo" style="text-align:center; margin-bottom:15px;"></div>
-
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Roll No</th>
-                <th>Branch</th>
-                <th>Year</th>
-                <th>Attendance</th>
-                <th>Marks</th>
-                <th>Performance</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody id="tableBody">
-           {% for student in students %}
-            <tr data-name="{{ student[1]|lower }}">
-      <td style="display:flex;align-items:center;gap:10px;">
-
-                 {% if student[7] %}
-             <img src="{{ url_for('static', filename='uploads/' + student[7]) }}"
-                 alt="{{ student[1] }}"
-              style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
-            {% else %}
-          <img src="{{ url_for('static', filename='uploads/default.png') }}"
-             alt="Default"
-             style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
-           {% endif %}
-
-          <span>{{ student[1] }}</span>
-
-       </td>
-            
-                <td>{{ student[2] }}</td>
-                <td>{{ student[3] }}</td>
-                <td>{{ student[6] }}</td>
-                <td>{{ student[4] }}</td>
-                <td>{{ student[5] }}</td>
-
-                    
-                <td>
-                    {% if student[5] >= 80 %}
-                        <span style="background:green;color:white;padding:5px 10px;border-radius:10px;">
-                            Excellent
-                        </span>
-                    {% elif student[5] >= 60 %}
-                        <span style="background:orange;color:white;padding:5px 10px;border-radius:10px;">
-                            Good
-                        </span>
-                    {% else %}
-                        <span style="background:red;color:white;padding:5px 10px;border-radius:10px;">
-                            Average
-                        </span>
-                    {% endif %}
-                </td>
-
-                <td>
-                    <a href="{{ url_for('edit_student', id=student[0]) }}"
-                        class="action-btn edit-btn">
-                        Edit
-                    </a>
-
-                    <a href="{{ url_for('student_detail', id=student[0]) }}"
-                       class="action-btn detail-btn">
-                       Details
-                    </a>
-
-                {% if session.get('role') == 'admin' %}
-
-                    <a href="{{ url_for('delete_student', id=student[0]) }}"
-                       class="action-btn delete-btn"
-                       onclick="return confirm('Are you sure?')">
-                       Delete
-                    </a>
-
-                {% endif %}
-                </td>
-
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-      <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3">
-          <ul class="pagination mb-0">
-              {% for p in range(1, total_pages + 1) %}
-                  <li class="page-item {% if p == page %}active{% endif %}">
-                      <a class="page-link" href="{{ url_for('records', page=p) }}">{{ p }}</a>
-                  </li>
-              {% endfor %}
-          </ul>
-      </nav>
-</div>
-
+<!-- Enhanced Search Script -->
 <script>
 const searchInput = document.getElementById("searchInput");
 const tableBody = document.getElementById("tableBody");
 const resultInfo = document.getElementById("resultInfo");
+const resultCount = document.getElementById("resultCount");
+
+// Set progress bar widths from data attributes
+function initializeProgressBars() {
+    const progressBars = document.querySelectorAll('.progress-bar[data-width]');
+    progressBars.forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = width + '%';
+    });
+}
 
 searchInput.addEventListener("input", function () {
-
     const searchTerm = this.value.toLowerCase();
     const rows = tableBody.querySelectorAll("tr");
 
@@ -275,9 +164,26 @@ searchInput.addEventListener("input", function () {
         }
     });
 
-    resultInfo.textContent =
-        visibleRows > 0
-        ? `Showing ${visibleRows} result(s)`
+    resultCount.textContent =
+        searchTerm === "" 
+        ? "Showing all students"
+        : visibleRows > 0
+        ? `Found ${visibleRows} student(s)`
         : "No results found";
 });
+
+// Initialize progress bars and result count
+initializeProgressBars();
+resultCount.textContent = "Showing all students";
 </script>
+
+<style>
+.btn-group-sm .btn {
+    padding: 0.35rem 0.5rem;
+}
+
+.progress {
+    background-color: #e9ecef;
+}
+</style>
+{% endblock %}

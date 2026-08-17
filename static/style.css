@@ -1,0 +1,505 @@
+/* Professional CSS for College Smart Portal */
+
+:root {
+    --primary-color: #1a6e50;
+    --secondary-color: #13a467;
+    --accent-color: #0f8b5c;
+    --light-bg: #f8fbf9;
+    --card-shadow: 0 4px 15px rgba(26, 110, 80, 0.1);
+    --card-shadow-hover: 0 8px 25px rgba(26, 110, 80, 0.15);
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #f8fbf9 0%, #eef5f2 100%);
+    min-height: 100vh;
+    color: #2c3e50;
+    line-height: 1.6;
+}
+
+/* Navbar Styling */
+.navbar {
+    background: linear-gradient(135deg, #1a6e50 0%, #13a467 100%) !important;
+    box-shadow: 0 2px 8px rgba(26, 110, 80, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white !important;
+    letter-spacing: 0.3px;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px;
+    margin: 0 4px;
+}
+
+.nav-link:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e0e7e4;
+    padding: 0.6rem 1rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(19, 164, 103, 0.1);
+}
+
+/* Card Styling */
+.card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #1a6e50 0%, #13a467 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 1.2rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Feature Card */
+.feature-card {
+    border-radius: 16px;
+    transition: all 0.35s ease;
+    background: white;
+}
+
+.feature-card .card-body {
+    padding: 1.5rem;
+}
+
+.feature-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a6e50;
+    margin-bottom: 0.8rem;
+}
+
+.feature-card .card-text {
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Hero Card */
+.hero-card {
+    background: linear-gradient(135deg, rgba(26, 110, 80, 0.95), rgba(19, 164, 103, 0.85));
+    border-radius: 20px;
+    color: white;
+    border: none;
+}
+
+.hero-card h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-card .lead {
+    font-size: 1.15rem;
+    opacity: 0.95;
+}
+
+/* Badge */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.badge.bg-primary {
+    background-color: #007bff !important;
+}
+
+.badge.bg-success {
+    background-color: #28a745 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary, .btn-success, .btn-info {
+    background: linear-gradient(135deg, #1a6e50, #13a467);
+    border: none;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(26, 110, 80, 0.3);
+    background: linear-gradient(135deg, #0f8b5c, #0d7a4a);
+}
+
+.btn-outline-light {
+    border: 2px solid white;
+    color: white;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-light {
+    background: white;
+    color: #1a6e50;
+    font-weight: 600;
+}
+
+.btn-light:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: 0.8rem 1.8rem;
+    font-size: 1.05rem;
+}
+
+/* Table Styling */
+.table {
+    background: white;
+    border-collapse: collapse;
+}
+
+.table thead.table-dark {
+    background: linear-gradient(135deg, #1a6e50, #13a467) !important;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #e0e7e4;
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8fbf9;
+    transform: scale(1.01);
+}
+
+.table td {
+    padding: 1rem 0.8rem;
+    vertical-align: middle;
+}
+
+.table th {
+    font-weight: 600;
+    padding: 1.2rem 0.8rem;
+    color: white !important;
+}
+
+/* Form Styling */
+.form-label {
+    font-weight: 600;
+    color: #1a6e50;
+    margin-bottom: 0.6rem;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e0e7e4;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(19, 164, 103, 0.1);
+    outline: none;
+}
+
+/* Input Placeholder */
+.form-control::placeholder {
+    color: #999;
+    font-size: 0.95rem;
+}
+
+/* Alert Styling */
+.alert {
+    border-radius: 10px;
+    border: none;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    box-shadow: var(--card-shadow);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    box-shadow: var(--card-shadow);
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    color: #0c5460;
+    box-shadow: var(--card-shadow);
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+    box-shadow: var(--card-shadow);
+}
+
+/* List Group */
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #e0e7e4;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8fbf9;
+    padding-left: 1.5rem;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item.bg-light {
+    background-color: #f8fbf9 !important;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d) !important;
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+footer a {
+    color: #13a467;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+footer a:hover {
+    color: #1a6e50;
+    text-decoration: underline;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: #1a6e50;
+}
+
+.display-6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+.stat-card h5 {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.stat-card p {
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+/* Text Styling */
+.text-success {
+    color: #13a467 !important;
+}
+
+.text-primary {
+    color: #1a6e50 !important;
+}
+
+.fw-bold {
+    font-weight: 700;
+}
+
+.fw-semi-bold {
+    font-weight: 600;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .hero-card .card-body {
+        padding: 2rem 1rem !important;
+    }
+
+    .hero-card h1 {
+        font-size: 1.8rem;
+    }
+
+    .nav-link {
+        padding: 0.4rem 0.8rem !important;
+        margin: 0.2rem 0 !important;
+    }
+
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .table td, .table th {
+        padding: 0.7rem 0.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Loading Animation */
+.spinner-border {
+    color: var(--secondary-color);
+}
+
+/* Utility Classes */
+.shadow-sm {
+    box-shadow: var(--card-shadow) !important;
+}
+
+.shadow-lg {
+    box-shadow: var(--card-shadow-hover) !important;
+}
+
+.rounded-lg {
+    border-radius: 12px;
+}
+
+.rounded-xl {
+    border-radius: 20px;
+}
+
+.opacity-75 {
+    opacity: 0.75;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #13a467;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1a6e50;
+}
+
+/* Accessibility */
+.btn:focus,
+.form-control:focus,
+a:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}

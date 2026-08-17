@@ -1,32 +1,138 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="mb-4">
+    <h1 class="display-6 fw-bold mb-2">
+        <i class="fas fa-bell me-2"></i>College Notices & Announcements
+    </h1>
+    <p class="text-muted">Stay updated with important college announcements</p>
+</div>
 
-<h2>📢 College Notices</h2>
+<div class="row g-4">
+    <!-- Main Notice Card -->
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success">
+                <h5 class="mb-0 text-white">
+                    <i class="fas fa-rocket me-2"></i>Python Training Program 2026
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-calendar me-2"></i><strong>Start Date:</strong> 28th May 2026
+                        </p>
+                        
+                        <h6 class="fw-bold mt-3 mb-2">Program Overview</h6>
+                        <p>
+                            The training program is designed to equip students with comprehensive knowledge in Python programming. 
+                            The curriculum focuses on:
+                        </p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Python Programming Fundamentals</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Problem-Solving Techniques</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Real-World Project Development</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Industry Best Practices</strong>
+                            </li>
+                        </ul>
 
-<h3>🚀 Python Training</h3>
+                        <h6 class="fw-bold mt-4 mb-2">Special Competition</h6>
+                        <p>
+                            To encourage learning, consistency, and active participation, a special competition has been announced.
+                            At the end of the training, the <strong>Top 5 performing students</strong> will be selected and 
+                            rewarded with special gifts and certificates.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-light border-0">
+                            <div class="card-body text-center">
+                                <i class="fas fa-gift fa-3x text-success mb-3"></i>
+                                <h6 class="fw-bold">Prizes for Top 5</h6>
+                                <p class="small text-muted">
+                                    Winners will receive certificates and special recognition
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<p><b>Date:</b> 28th 2026</p>
+    <!-- Additional Notices -->
+    <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header">
+                <h6 class="text-white" fw-bold><i class="fas fa-users me-2"></i>Highlights  </h6>
+            </div>
+                <div class="list-group-item">
+                    <h6 class="mb-1"><i class="fas fa-award text-success me-2"></i>Internship Opportunities</h6>
+                    <p class="small text-muted mb-0">Internship opportunities post-training</p>
+                </div>
+                <div class="list-group-item">
+                    <h6 class="mb-1"><i class="fas fa-users text-info me-2"></i>Expert Instructors</h6>
+                    <p class="small text-muted mb-0">Learn from industry experts and professionals</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header">
+                <h6 class="text-white" fw-bold><i class="fas fa-users me-2"></i>Requirements  </h6>
+            </div>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item">
+                    <i class="fas fa-check text-success me-2"></i>
+                    <strong>Eligibility:</strong> second year students
+                </div>
+                <div class="list-group-item">
+                    <i class="fas fa-check text-success me-2"></i>
+                    <strong>Duration:</strong> 12 weeks intensive program
+                </div>
+                <div class="list-group-item">
+                    <i class="fas fa-check text-success me-2"></i>
+                    <strong>Schedule:</strong> daily sessions 10-12 am
+                </div>
+                <div class="list-group-item">
+                    <i class="fas fa-check text-success me-2"></i>
+                    <strong>Participation:</strong> Mandatory attendance 80%+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>
-The training focuses on Python programming,
-problem-solving techniques, and real-world
-project development.
-</p>
+<!-- Call to Action -->
+<div class="alert alert-success border-0 mt-4" role="alert">
+    <div class="d-flex align-items-center">
+        <i class="fas fa-info-circle fa-2x me-3"></i>
+        <div>
+            <h6 class="alert-heading mb-1">Register Now!</h6>
+            <p class="mb-0">Limited seats available. Contact your department head for registration details.</p>
+        </div>
+    </div>
+</div>
 
-
-<p>
-Sir announced that",
-    "To encourage learning, consistency, and active participation,"
-    " a special competition has been announced.",
-    "At the end of the training, "
-    "the Top 5 performing students will be selected and rewarded with a special gift.
-</p>
-
-<a href="{{ url_for('home') }}">
-Back to Home
-</a>
+<!-- Navigation -->
+<div class="mt-4">
+    <a href="{{ url_for('home') }}" class="btn btn-outline-success">
+        <i class="fas fa-arrow-left me-2"></i>Back to Home
+    </a>
+</div>
 
 {% endblock %}
 

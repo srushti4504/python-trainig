@@ -4,10 +4,9 @@
 
 <div class="container mt-4">
 
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h2>Student Details</h2>
-        </div>
+           <div class="card-header">
+                <h6 class="text-white" fw-bold><i class="fas fa-users me-2"></i>Student Details</h6>
+            </div>
 
            <div style="display:flex; align-items:center; gap:16px; padding:16px;">
 
@@ -26,37 +25,33 @@
                     <div style="color:#666;">Roll: {{ student[2] }}</div>
                 </div>
           </div>        
-              
-        
+                
 
-            <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
 
-                <tr>
-                    <th>Name</th>
-                    <td>{{ student[1] }}</td>
-                </tr>
+            <thead class="table-dark">
+              <tr>
+                   <th>Name</th>
+                   <th>Roll No</th>
+                  <th>Branch</th>
+                  <th>Attendance</th>
+                  <th>Marks</th>
+             </tr>
+         </thead>
 
-                <tr>
-                    <th>Roll No</th>
-                    <td>{{ student[2] }}</td>
-                </tr>
+        <tbody>
+          <tr>
+             <td>{{ student[1] }}</td>
+             <td>{{ student[2] }}</td>
+             <td>{{ student[4] }}</td>
+             <td>{{ student[3]}}</td>
+             <td>{{ student[5] }}</td>
+          </tr>
+      </tbody>
 
-                <tr>
-                    <th>Attendance</th>
-                    <td>{{ student[5] }}%</td>
-                </tr>
+  </table>
 
-                <tr>
-                    <th>Branch</th>
-                    <td>{{ student[4] }}</td>
-                </tr>
-
-                <tr>
-                    <th>Marks</th>
-                    <td>{{ student[3] }}</td>
-                </tr>
-
-            </table>
+            
 
             <a href="{{ url_for('home') }}" class="btn btn-success">
                 Back to Home
