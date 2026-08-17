@@ -418,7 +418,7 @@ def dashboard():
         ORDER BY year, branch
     """).fetchall()
 
-    students = conn.execute("SELECT name, branch, year FROM students ORDER BY year, branch, name").fetchall()
+    students = conn.execute("SELECT name, branch, year, marks, attendance FROM students ORDER BY year, branch, name").fetchall()
 
     conn.close()
 
@@ -431,6 +431,58 @@ def dashboard():
                            year_branch_counts=year_branch_counts,
                            students=students)
 
+@app.route('/reports')
+def reports():
+    conn = get_db()
+    
+    # Department-wise performance
+    dept_performance = conn.execute("""
+        SELECT 
+            branch AS department,
+            COUNT(*) AS total_students,
+            ROUND(AVG(marks), 2) AS avg_marks,
+            MAX(marks) AS highest_marks,
+            MIN(marks) AS lowest_marks,
+            ROUND(AVG(attendance), 2) AS avg_attendance
+        FROM students
+        GROUP BY branch
+        ORDER BY avg_marks DESC
+    """).fetchall()
+    
+    # Year-wise performance
+    year_performance = conn.execute("""
+        SELECT 
+            year,
+            COUNT(*) AS total_students,
+            ROUND(AVG(marks), 2) AS avg_marks,
+            MAX(marks) AS highest_marks,
+            MIN(marks) AS lowest_marks,
+            ROUND(AVG(attendance), 2) AS avg_attendance
+        FROM students
+        GROUP BY year
+        ORDER BY year
+    """).fetchall()
+    
+    # Department and Year combined
+    dept_year_performance = conn.execute("""
+        SELECT 
+            branch AS department,
+            year,
+            COUNT(*) AS total_students,
+            ROUND(AVG(marks), 2) AS avg_marks,
+            MAX(marks) AS highest_marks,
+            MIN(marks) AS lowest_marks,
+            ROUND(AVG(attendance), 2) AS avg_attendance
+        FROM students
+        GROUP BY branch, year
+        ORDER BY branch, year
+    """).fetchall()
+    
+    conn.close()
+    
+    return render_template('reports.html',
+                          dept_performance=dept_performance,
+                          year_performance=year_performance,)
 init_db()    
 if __name__ == "__main__":
     app.run(debug=True)
