@@ -166,10 +166,14 @@ def get_ai_tip(id):
     """
     client = Groq(api_key=os.getenv("GROQ_API_KEY"))
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-20b",
         messages=[
+            
             {"role": "user", "content": prompt}
-        ]
+        ],
+        temperature=0.7,
+        max_tokens=300
+    
     )
     tip = response.choices[0].message.content
     return render_template("detail.html", student=student, tip=tip)
